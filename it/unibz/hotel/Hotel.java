@@ -1,14 +1,29 @@
+package it.unibz.hotel;
+
+import it.unibz.exception.NotAvailable;
+import it.unibz.extra.Food;
+import it.unibz.reservation.Reservation;
+import it.unibz.room.DoubleRoom;
+import it.unibz.room.SingleRoom;
+
+import java.util.List;
 import java.util.Scanner;
 
-class Hotel
-{
-    static Holder hotel_ob=new Holder();
+public class Hotel {
+
+    static Rooms rooms = new Rooms();
+    static List<Reservation> reservations;
+
     static Scanner sc = new Scanner(System.in);
-    static void CustDetails(int i,int rn)
-    {
+
+    public static void loadRoomStatus() {
+        //TODO: implement loading from backup data
+    }
+
+    static void customerDetails(int i, int rn) {
         String name, contact, gender;
         String name2 = null, contact2 = null;
-        String gender2="";
+        String gender2 = "";
         System.out.print("\nEnter customer name: ");
         name = sc.next();
         System.out.print("Enter contact number: ");
@@ -26,29 +41,29 @@ class Hotel
         }
 
         switch (i) {
-            case 1:hotel_ob.luxury_doublerrom[rn]=new DoubleRoom(name,contact,gender,name2,contact2,gender2);
+            case 1:rooms.luxury_doublerrom[rn] = new DoubleRoom(name,contact,gender,name2,contact2,gender2);
                 break;
-            case 2:hotel_ob.deluxe_doublerrom[rn]=new DoubleRoom(name,contact,gender,name2,contact2,gender2);
+            case 2:rooms.deluxe_doublerrom[rn] = new DoubleRoom(name,contact,gender,name2,contact2,gender2);
                 break;
-            case 3:hotel_ob.luxury_singleerrom[rn]=new SingleRoom(name,contact,gender);
+            case 3:rooms.luxury_singleerrom[rn] = new SingleRoom(name,contact,gender);
                 break;
-            case 4:hotel_ob.deluxe_singleerrom[rn]=new SingleRoom(name,contact,gender);
+            case 4:rooms.deluxe_singleerrom[rn] = new SingleRoom(name,contact,gender);
                 break;
             default:System.out.println("Wrong option");
                 break;
         }
     }
 
-    static void bookroom(int i)
+    static void bookRoom(int i)
     {
         int j;
         int rn;
         System.out.println("\nChoose room number from : ");
         switch (i) {
             case 1:
-                for(j=0;j<hotel_ob.luxury_doublerrom.length;j++)
+                for(j=0;j<rooms.luxury_doublerrom.length;j++)
                 {
-                    if(hotel_ob.luxury_doublerrom[j]==null)
+                    if(rooms.luxury_doublerrom[j]==null)
                     {
                         System.out.print(j+1+",");
                     }
@@ -57,9 +72,9 @@ class Hotel
                 try{
                     rn=sc.nextInt();
                     rn--;
-                    if(hotel_ob.luxury_doublerrom[rn]!=null)
+                    if(rooms.luxury_doublerrom[rn]!=null)
                         throw new NotAvailable();
-                    CustDetails(i,rn);
+                    CustomerDetails(i,rn);
                 }
                 catch(Exception e)
                 {
@@ -68,9 +83,9 @@ class Hotel
                 }
                 break;
             case 2:
-                for(j=0;j<hotel_ob.deluxe_doublerrom.length;j++)
+                for(j=0;j<rooms.deluxe_doublerrom.length;j++)
                 {
-                    if(hotel_ob.deluxe_doublerrom[j]==null)
+                    if(rooms.deluxe_doublerrom[j]==null)
                     {
                         System.out.print(j+11+",");
                     }
@@ -79,9 +94,9 @@ class Hotel
                 try{
                     rn=sc.nextInt();
                     rn=rn-11;
-                    if(hotel_ob.deluxe_doublerrom[rn]!=null)
+                    if(rooms.deluxe_doublerrom[rn]!=null)
                         throw new NotAvailable();
-                    CustDetails(i,rn);
+                    CustomerDetails(i,rn);
                 }
                 catch(Exception e)
                 {
@@ -90,9 +105,9 @@ class Hotel
                 }
                 break;
             case 3:
-                for(j=0;j<hotel_ob.luxury_singleerrom.length;j++)
+                for(j=0;j<rooms.luxury_singleerrom.length;j++)
                 {
-                    if(hotel_ob.luxury_singleerrom[j]==null)
+                    if(rooms.luxury_singleerrom[j]==null)
                     {
                         System.out.print(j+31+",");
                     }
@@ -101,9 +116,9 @@ class Hotel
                 try{
                     rn=sc.nextInt();
                     rn=rn-31;
-                    if(hotel_ob.luxury_singleerrom[rn]!=null)
+                    if(rooms.luxury_singleerrom[rn]!=null)
                         throw new NotAvailable();
-                    CustDetails(i,rn);
+                    CustomerDetails(i,rn);
                 }
                 catch(Exception e)
                 {
@@ -112,9 +127,9 @@ class Hotel
                 }
                 break;
             case 4:
-                for(j=0;j<hotel_ob.deluxe_singleerrom.length;j++)
+                for(j=0;j<rooms.deluxe_singleerrom.length;j++)
                 {
-                    if(hotel_ob.deluxe_singleerrom[j]==null)
+                    if(rooms.deluxe_singleerrom[j]==null)
                     {
                         System.out.print(j+41+",");
                     }
@@ -123,9 +138,9 @@ class Hotel
                 try{
                     rn=sc.nextInt();
                     rn=rn-41;
-                    if(hotel_ob.deluxe_singleerrom[rn]!=null)
+                    if(rooms.deluxe_singleerrom[rn]!=null)
                         throw new NotAvailable();
-                    CustDetails(i,rn);
+                    CustomerDetails(i,rn);
                 }
                 catch(Exception e)
                 {
@@ -164,28 +179,28 @@ class Hotel
             case 1:
                 for(j=0;j<10;j++)
                 {
-                    if(hotel_ob.luxury_doublerrom[j]==null)
+                    if(rooms.luxury_doublerrom[j]==null)
                         count++;
                 }
                 break;
             case 2:
-                for(j=0;j<hotel_ob.deluxe_doublerrom.length;j++)
+                for(j=0;j<rooms.deluxe_doublerrom.length;j++)
                 {
-                    if(hotel_ob.deluxe_doublerrom[j]==null)
+                    if(rooms.deluxe_doublerrom[j]==null)
                         count++;
                 }
                 break;
             case 3:
-                for(j=0;j<hotel_ob.luxury_singleerrom.length;j++)
+                for(j=0;j<rooms.luxury_singleerrom.length;j++)
                 {
-                    if(hotel_ob.luxury_singleerrom[j]==null)
+                    if(rooms.luxury_singleerrom[j]==null)
                         count++;
                 }
                 break;
             case 4:
-                for(j=0;j<hotel_ob.deluxe_singleerrom.length;j++)
+                for(j=0;j<rooms.deluxe_singleerrom.length;j++)
                 {
-                    if(hotel_ob.deluxe_singleerrom[j]==null)
+                    if(rooms.deluxe_singleerrom[j]==null)
                         count++;
                 }
                 break;
@@ -210,11 +225,11 @@ class Hotel
                 amount+=4000;
                 System.out.println("\nRoom Charge - "+4000);
                 System.out.println("\n===============");
-                System.out.println("Food Charges:- ");
+                System.out.println("main.Food Charges:- ");
                 System.out.println("===============");
                 System.out.println("Item   Quantity    Price");
                 System.out.println("-------------------------");
-                for(Food obb:hotel_ob.luxury_doublerrom[rn].food)
+                for(Food obb:rooms.luxury_doublerrom[rn].food)
                 {
                     amount+=obb.getPrice();
                     String format = "%-10s%-10s%-10s%n";
@@ -224,11 +239,11 @@ class Hotel
                 break;
             case 2:amount+=3000;
                 System.out.println("Room Charge - "+3000);
-                System.out.println("\nFood Charges:- ");
+                System.out.println("\nmain.Food Charges:- ");
                 System.out.println("===============");
                 System.out.println("Item   Quantity    Price");
                 System.out.println("-------------------------");
-                for(Food obb:hotel_ob.deluxe_doublerrom[rn].food)
+                for(Food obb:rooms.deluxe_doublerrom[rn].food)
                 {
                     amount+=obb.getPrice();
                     String format = "%-10s%-10s%-10s%n";
@@ -237,11 +252,11 @@ class Hotel
                 break;
             case 3:amount+=2200;
                 System.out.println("Room Charge - "+2200);
-                System.out.println("\nFood Charges:- ");
+                System.out.println("\nmain.Food Charges:- ");
                 System.out.println("===============");
                 System.out.println("Item   Quantity    Price");
                 System.out.println("-------------------------");
-                for(Food obb:hotel_ob.luxury_singleerrom[rn].food)
+                for(Food obb:rooms.luxury_singleerrom[rn].food)
                 {
                     amount+=obb.getPrice();
                     String format = "%-10s%-10s%-10s%n";
@@ -250,11 +265,11 @@ class Hotel
                 break;
             case 4:amount+=1200;
                 System.out.println("Room Charge - "+1200);
-                System.out.println("\nFood Charges:- ");
+                System.out.println("\nmain.Food Charges:- ");
                 System.out.println("===============");
                 System.out.println("Item   Quantity    Price");
                 System.out.println("-------------------------");
-                for(Food obb: hotel_ob.deluxe_singleerrom[rn].food)
+                for(Food obb: rooms.deluxe_singleerrom[rn].food)
                 {
                     amount+=obb.getPrice();
                     String format = "%-10s%-10s%-10s%n";
@@ -273,8 +288,8 @@ class Hotel
         char w;
         switch (rtype) {
             case 1:
-                if(hotel_ob.luxury_doublerrom[rn]!=null)
-                    System.out.println("Room used by "+hotel_ob.luxury_doublerrom[rn].name);
+                if(rooms.luxury_doublerrom[rn]!=null)
+                    System.out.println("Room used by "+rooms.luxury_doublerrom[rn].name);
                 else
                 {
                     System.out.println("Empty Already");
@@ -285,14 +300,14 @@ class Hotel
                 if(w=='y'||w=='Y')
                 {
                     bill(rn,rtype);
-                    hotel_ob.luxury_doublerrom[rn]=null;
+                    rooms.luxury_doublerrom[rn]=null;
                     System.out.println("Deallocated succesfully");
                 }
 
                 break;
             case 2:
-                if(hotel_ob.deluxe_doublerrom[rn]!=null)
-                    System.out.println("Room used by "+hotel_ob.deluxe_doublerrom[rn].name);
+                if(rooms.deluxe_doublerrom[rn]!=null)
+                    System.out.println("Room used by "+rooms.deluxe_doublerrom[rn].name);
                 else
                 {
                     System.out.println("Empty Already");
@@ -303,14 +318,14 @@ class Hotel
                 if(w=='y'||w=='Y')
                 {
                     bill(rn,rtype);
-                    hotel_ob.deluxe_doublerrom[rn]=null;
+                    rooms.deluxe_doublerrom[rn]=null;
                     System.out.println("Deallocated succesfully");
                 }
 
                 break;
             case 3:
-                if(hotel_ob.luxury_singleerrom[rn]!=null)
-                    System.out.println("Room used by "+hotel_ob.luxury_singleerrom[rn].name);
+                if(rooms.luxury_singleerrom[rn]!=null)
+                    System.out.println("Room used by "+rooms.luxury_singleerrom[rn].name);
                 else
                 {
                     System.out.println("Empty Already");
@@ -321,14 +336,14 @@ class Hotel
                 if(w=='y'||w=='Y')
                 {
                     bill(rn,rtype);
-                    hotel_ob.luxury_singleerrom[rn]=null;
+                    rooms.luxury_singleerrom[rn]=null;
                     System.out.println("Deallocated succesfully");
                 }
 
                 break;
             case 4:
-                if(hotel_ob.deluxe_singleerrom[rn]!=null)
-                    System.out.println("Room used by "+hotel_ob.deluxe_singleerrom[rn].name);
+                if(rooms.deluxe_singleerrom[rn]!=null)
+                    System.out.println("Room used by "+rooms.deluxe_singleerrom[rn].name);
                 else
                 {
                     System.out.println("Empty Already");
@@ -339,7 +354,7 @@ class Hotel
                 if(w=='y'||w=='Y')
                 {
                     bill(rn,rtype);
-                    hotel_ob.deluxe_singleerrom[rn]=null;
+                    rooms.deluxe_singleerrom[rn]=null;
                     System.out.println("Deallocated succesfully");
                 }
                 break;
@@ -362,13 +377,13 @@ class Hotel
                 q=sc.nextInt();
 
                 switch(rtype){
-                    case 1: hotel_ob.luxury_doublerrom[rn].food.add(new Food(i,q));
+                    case 1: rooms.luxury_doublerrom[rn].food.add(new Food(i,q));
                         break;
-                    case 2: hotel_ob.deluxe_doublerrom[rn].food.add(new Food(i,q));
+                    case 2: rooms.deluxe_doublerrom[rn].food.add(new Food(i,q));
                         break;
-                    case 3: hotel_ob.luxury_singleerrom[rn].food.add(new Food(i,q));
+                    case 3: rooms.luxury_singleerrom[rn].food.add(new Food(i,q));
                         break;
-                    case 4: hotel_ob.deluxe_singleerrom[rn].food.add(new Food(i,q));
+                    case 4: rooms.deluxe_singleerrom[rn].food.add(new Food(i,q));
                         break;
                 }
                 System.out.println("Do you want to order anything else ? (y/n)");

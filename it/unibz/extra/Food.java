@@ -1,6 +1,8 @@
+package it.unibz.extra;
+
 import java.io.Serializable;
 
-class Food implements Serializable
+public class Food extends Extra implements Serializable
 {
     private int code;
     private int quantity;

@@ -1,3 +1,9 @@
+package it.unibz;
+
+import it.unibz.hotel.Rooms;
+import it.unibz.hotel.Hotel;
+import it.unibz.util.Serializer;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -13,7 +19,7 @@ public class Main {
             {
                 FileInputStream fin = new FileInputStream(f);
                 ObjectInputStream ois = new ObjectInputStream(fin);
-                Hotel.hotel_ob = (Holder) ois.readObject();
+                Hotel.hotel_ob = (Rooms) ois.readObject();
             }
 
             Scanner sc = new Scanner(System.in);
@@ -84,7 +90,7 @@ public class Main {
 
             }while(wish=='y'||wish=='Y');
 
-            Thread t=new Thread(new Write(Hotel.hotel_ob));
+            Thread t=new Thread(new Serializer(Hotel.hotel_ob));
             t.start();
         }
         catch(Exception e)

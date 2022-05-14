@@ -1,4 +1,6 @@
-class NotAvailable extends Exception
+package it.unibz.exception;
+
+public class NotAvailable extends Exception
 {
     @Override
     public String toString()

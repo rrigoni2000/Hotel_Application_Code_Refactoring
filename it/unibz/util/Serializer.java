@@ -1,13 +1,16 @@
+package it.unibz.util;
+
+import it.unibz.hotel.Rooms;
+
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
-class Write implements Runnable
-{
-    Holder hotel_ob;
-    Write(Holder hotel_ob)
-    {
+public class Serializer implements Runnable {
+    Rooms hotel_ob;
+    public Serializer(Rooms hotel_ob) {
         this.hotel_ob=hotel_ob;
     }
+
     @Override
     public void run() {
         try{
