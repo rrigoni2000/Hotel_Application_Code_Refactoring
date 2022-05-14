@@ -1,12 +1,9 @@
 package it.unibz.room;
 
-import it.unibz.customer.Customer;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Room implements Serializable {
+
     private static int counter = 0;
     private static synchronized int getNextCounter() { return counter++; }
 
