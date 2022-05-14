@@ -1,24 +1,27 @@
 package it.unibz.room;
 
+import it.unibz.room.optional.RoomOptional;
+
 import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
 
 public abstract class Room implements Serializable {
 
     private static int counter = 0;
     private static synchronized int getNextCounter() { return counter++; }
 
-    private int roomCapacity;
+    /**
+     * unique identifier for the Room
+     */
     private int id;
-
-    //private List<Customer> customers;
 
     public Room() {
         this.id = getNextCounter();
-        // override the method
-        this.roomCapacity = this.getRoomCapacity();
+    }
 
-        // this.customers = new ArrayList<>();
-        // this.orderedFood = new ArrayList<>();
+    public Room(int id) {
+        this.id = id;
     }
 
     /**
@@ -26,6 +29,27 @@ public abstract class Room implements Serializable {
      * @return
      */
     public abstract int getRoomCapacity();
+
+    public abstract String getRoomName();
+
+    public abstract double getCostPerDay();
+
+    public abstract List<RoomOptional> getRoomOptionals();
+
+    public String getRoomDetails() {
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("Room: " + this.getRoomName() + "\n");
+        builder.append("Person: " + this.getRoomCapacity() + "\n");
+        builder.append("Price per day: " + this.getCostPerDay() + "\n");
+
+        builder.append("\n");
+        this.getRoomOptionals().stream().forEach(optional -> builder.append(optional.getOptionalName() + " at " +
+                optional.getAdditionalCost() + " euro per day"));
+
+        return builder.toString();
+    }
 
     /*
     public void addCustomer(Customer newCustomer) {
@@ -53,6 +77,17 @@ public abstract class Room implements Serializable {
             throw new RuntimeException("Customer " + customer.toString() + " not assigned for the room");
     }
      */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Room)) return false;
+        Room room = (Room) o;
+        return id == room.id;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 }

@@ -1,39 +1,46 @@
 package it.unibz;
 
-import it.unibz.hotel.Rooms;
 import it.unibz.hotel.Hotel;
+import it.unibz.room.RoomService;
 import it.unibz.util.Serializer;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args){
-
+        Scanner sc = new Scanner(System.in);
         try
         {
+            /**
+             * as done in the code, provide some input files to populate the rooms available and the reservations for them
+             */
+            /*
             File f = new File("backup");
             if(f.exists())
             {
                 FileInputStream fin = new FileInputStream(f);
                 ObjectInputStream ois = new ObjectInputStream(fin);
-                Hotel.hotel_ob = (Rooms) ois.readObject();
+                Hotel.hotel_ob = (RoomsManager) ois.readObject();
             }
+             */
 
-            Scanner sc = new Scanner(System.in);
             int ch,ch2;
             char wish;
             x:
             do{
-
                 System.out.println("\nEnter your choice :\n1.Display room details\n2.Display room availability \n3.Book\n4.Order food\n5.Checkout\n6.Exit\n");
                 ch = sc.nextInt();
                 switch(ch){
-                    case 1: System.out.println("\nChoose room type :\n1.Luxury Double Room \n2.Deluxe Double Room \n3.Luxury Single Room \n4.Deluxe Single Room\n");
+                    case 1:
+                        System.out.println("\nChoose room type :");
+                        Map<Integer,String> roomNames = RoomService.getRoomNames(Hotel.rooms);
+                        printAsNumberedList(RoomService.getRoomNames(Hotel.rooms));
                         ch2 = sc.nextInt();
-                        Hotel.features(ch2);
+                        // check that the character is within the range
+                        System.out.println(RoomService.getRoomDetailsByRoomName(roomNames.get(ch2),Hotel.rooms));
                         break;
                     case 2:System.out.println("\nChoose room type :\n1.Luxury Double Room \n2.Deluxe Double Room \n3.Luxury Single Room\n4.Deluxe Single Room\n");
                         ch2 = sc.nextInt();
@@ -90,12 +97,32 @@ public class Main {
 
             }while(wish=='y'||wish=='Y');
 
-            Thread t=new Thread(new Serializer(Hotel.hotel_ob));
+            Thread t = new Thread(new Serializer(Hotel.hotel_ob));
             t.start();
         }
         catch(Exception e)
         {
             System.out.println("Not a valid input");
         }
+    }
+
+    private static String printAsNumberedList(Collection<String> options) {
+        StringBuilder builder = new StringBuilder();
+        int counter = 1;
+
+        options.stream().forEach(option -> builder.append("\n" + counter + ". " + options));
+
+        // remove initial new line character
+        return builder.toString().substring(1);
+    }
+
+    private static String printAsNumberedList(Map<Integer, String> names) {
+        List<Map.Entry<Integer,String>> entries = new ArrayList<>(names.entrySet());
+
+        StringBuilder builder = new StringBuilder();
+
+        entries.stream().sorted(Map.Entry.comparingByKey()).forEach(name -> builder.append("\n").append(name.getKey()).append(". ").append(name.getValue()));
+
+        return builder.substring(1);
     }
 }

@@ -37,7 +37,10 @@ public class ReservationFactory {
             throw new RuntimeException("No Customers specified");
         else if(this.customers.size() > this.room.getRoomCapacity())
             throw new RuntimeException("Too many Customers");
-        else
+        else {
+            // populate the Reservation with the provided Customers
+            this.customers.stream().forEach((customer) -> this.reservation.getCustomers().add(customer));
             return this.reservation;
+        }
     }
 }
