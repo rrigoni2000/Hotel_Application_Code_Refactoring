@@ -1,12 +1,11 @@
 package it.unibz.test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import it.unibz.src.reservation.Reservation;
 import it.unibz.src.room.Room;
 import it.unibz.src.util.Deserializer;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class RoomsDeserializerTest {
 
 
-    private String sampleMap = "{\"it.unibz.src.room.DeluxeDoubleRoom\":[2],\"it.unibz.src.room.LuxuryDoubleRoom\":[1]}";
+    private final String sampleMapStr = "{\"it.unibz.src.room.DeluxeDoubleRoom\":[2],\"it.unibz.src.room.LuxuryDoubleRoom\":[1]}";
 
     @Test
     public void deserializeSingleRoom() {
@@ -34,9 +33,17 @@ public class RoomsDeserializerTest {
     }
 
     @Test
-    public void deserializeFromFile() throws IOException {
-        List<Room> rooms = Deserializer.readRooms(sampleMap);
+    public void deserializeFromString() throws IOException {
+        List<Room> rooms = Deserializer.readRooms(sampleMapStr);
 
         assertEquals(2, rooms.size());
+    }
+
+    @Test
+    public void deserializeFromSampleFile() throws IOException {
+        List<Reservation> reservations = Deserializer.readReservations(new File("it/unibz/sample/sampleReservations.json"));
+        List<Room> rooms = Deserializer.readRooms(new File("it/unibz/sample/sampleRooms.json"));
+        assertEquals(0, reservations.size());
+        assertEquals(40, rooms.size());
     }
 }
