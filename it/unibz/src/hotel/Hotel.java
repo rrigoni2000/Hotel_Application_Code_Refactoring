@@ -65,6 +65,8 @@ public class Hotel {
         int rn;
         System.out.println("\nChoose room number from : ");
         switch (i) {
+        
+        
             case 1:
                 for(j=0;j<roomsManager.luxury_doublerrom.length;j++)
                 {
@@ -87,6 +89,8 @@ public class Hotel {
                     return;
                 }
                 break;
+                
+                
             case 2:
                 for(j=0;j<roomsManager.deluxe_doublerrom.length;j++)
                 {
@@ -109,6 +113,8 @@ public class Hotel {
                     return;
                 }
                 break;
+                
+                
             case 3:
                 for(j=0;j<roomsManager.luxury_singleerrom.length;j++)
                 {
@@ -131,6 +137,7 @@ public class Hotel {
                     return;
                 }
                 break;
+                
             case 4:
                 for(j=0;j<roomsManager.deluxe_singleerrom.length;j++)
                 {
