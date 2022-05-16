@@ -10,13 +10,11 @@ import java.io.ObjectInputStream;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        try
-        {
-            /**
-             * as done in the code, provide some input files to populate the rooms available and the reservations for them
-             */
+        /**
+         * as done in the code, provide some input files to populate the rooms available and the reservations for them
+         */
             /*
             File f = new File("backup");
             if(f.exists())
@@ -27,6 +25,7 @@ public class Main {
             }
              */
 
+            /*
             int ch,ch2;
             char wish;
             x:
@@ -104,8 +103,13 @@ public class Main {
         {
             System.out.println("Not a valid input");
         }
+
+    }
+    */
+
     }
 
+    /*
     private static String printAsNumberedList(Collection<String> options) {
         StringBuilder builder = new StringBuilder();
         int counter = 1;
@@ -125,4 +129,6 @@ public class Main {
 
         return builder.substring(1);
     }
+
+     */
 }
