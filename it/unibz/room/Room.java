@@ -1,6 +1,8 @@
 package it.unibz.room;
 
 import it.unibz.room.optional.RoomOptional;
+import it.unibz.room.quantity.Quantity;
+import it.unibz.room.roomtype.RoomType;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,44 +10,45 @@ import java.util.Objects;
 
 public abstract class Room implements Serializable {
 
-    private static int counter = 0;
-    private static synchronized int getNextCounter() { return counter++; }
-
-    /**
+     /**
      * unique identifier for the Room
      */
     private int id;
-
-    public Room() {
-        this.id = getNextCounter();
-    }
+    private RoomType roomType = getRoomType();
+    private Quantity quantity = getQuantity();
 
     public Room(int id) {
         this.id = id;
     }
 
-    /**
-     * implements this method to customize the number of person that could be in the room
-     * @return
-     */
-    public abstract int getRoomCapacity();
+    public Room() {
+    }
 
-    public abstract String getRoomName();
+    public abstract RoomType getAssociatedRoomType();
+    public abstract Quantity getAssociatedQuantity();
 
-    public abstract double getCostPerDay();
+    public String getRoomName() {
+        return String.format("%s %s Room", this.roomType.getName(), this.quantity.getName());
+    }
 
-    public abstract List<RoomOptional> getRoomOptionals();
+    public double getCostPerDay() {
+        return this.roomType.getDailyCostProPerson() * this.quantity.getQuantity();
+    }
+
+    public List<RoomOptional> getRoomOptionals() {
+        return this.roomType.getDefaultRoomOptionals();
+    }
 
     public String getRoomDetails() {
 
         StringBuilder builder = new StringBuilder();
 
         builder.append("Room: " + this.getRoomName() + "\n");
-        builder.append("Person: " + this.getRoomCapacity() + "\n");
+        builder.append("Person: " + this.quantity.getQuantity() + "\n");
         builder.append("Price per day: " + this.getCostPerDay() + "\n");
 
         builder.append("\n");
-        this.getRoomOptionals().stream().forEach(optional -> builder.append(optional.getOptionalName() + " at " +
+        this.getRoomOptionals().stream().forEach(optional -> builder.append(optional.getName() + " at " +
                 optional.getAdditionalCost() + " euro per day"));
 
         return builder.toString();
@@ -76,6 +79,25 @@ public abstract class Room implements Serializable {
         else
             throw new RuntimeException("Customer " + customer.toString() + " not assigned for the room");
     }
+     */
+
+    /** getters */
+    public int getId() {
+        return id;
+    }
+
+    public RoomType getRoomType() {
+       return this.roomType != null ? this.roomType : getAssociatedRoomType();
+    }
+
+    public Quantity getQuantity() {
+        return this.quantity != null ? this.quantity : getAssociatedQuantity();
+    }
+
+    /**
+     * compare room instances according to only the id parameter
+     * @param o
+     * @return
      */
     @Override
     public boolean equals(Object o) {

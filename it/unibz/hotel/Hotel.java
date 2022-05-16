@@ -5,7 +5,6 @@ import it.unibz.extra.Food;
 import it.unibz.reservation.Reservation;
 import it.unibz.room.*;
 
-import java.awt.desktop.SystemSleepEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,7 +14,7 @@ public class Hotel {
     /**
      * rooms that are in the hotel. Defined at compilation time for the moment. Then use reflection.
      */
-   public  static List<Room> rooms = getPredefinedRooms();
+   public static List<Room> rooms = getPredefinedRooms();
 
     /**
      * reservations: interact with reservations to obtain information

@@ -1,6 +1,7 @@
 package it.unibz;
 
 import it.unibz.hotel.Hotel;
+import it.unibz.room.Room;
 import it.unibz.room.RoomService;
 import it.unibz.util.Serializer;
 

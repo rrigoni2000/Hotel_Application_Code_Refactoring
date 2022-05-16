@@ -35,7 +35,7 @@ public class ReservationFactory {
             throw new RuntimeException("Incomplete Parameters: room missing");
         else if(this.customers.size() == 0)
             throw new RuntimeException("No Customers specified");
-        else if(this.customers.size() > this.room.getRoomCapacity())
+        else if(this.customers.size() > this.room.getQuantity().getQuantity())
             throw new RuntimeException("Too many Customers");
         else {
             // populate the Reservation with the provided Customers

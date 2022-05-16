@@ -2,7 +2,7 @@ package it.unibz.room.optional;
 
 public class RoomServiceOptional extends RoomOptional {
     @Override
-    public String getOptionalName() {
+    public String getName() {
         return "Room Service";
     }
 

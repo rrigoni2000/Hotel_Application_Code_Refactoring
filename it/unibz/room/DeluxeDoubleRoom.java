@@ -1,38 +1,27 @@
 package it.unibz.room;
 
-import it.unibz.room.optional.AirConditioner;
-import it.unibz.room.optional.RoomOptional;
-import it.unibz.room.optional.RoomServiceOptional;
-
-import java.util.ArrayList;
-import java.util.List;
+import it.unibz.room.quantity.Double;
+import it.unibz.room.quantity.Quantity;
+import it.unibz.room.roomtype.Deluxe;
+import it.unibz.room.roomtype.RoomType;
 
 public class DeluxeDoubleRoom extends Room {
 
+    public DeluxeDoubleRoom(int id) {
+        super(id);
+    }
+
     public DeluxeDoubleRoom() {
-        super();
     }
 
     @Override
-    public int getRoomCapacity() {
-        return 2;
+    public RoomType getAssociatedRoomType() {
+        return new Deluxe();
     }
 
     @Override
-    public String getRoomName() {
-        return "Deluxe Double";
+    public Quantity getAssociatedQuantity() {
+        return new Double();
     }
 
-    @Override
-    public double getCostPerDay() {
-        return 160.0;
-    }
-
-    @Override
-    public List<RoomOptional> getRoomOptionals() {
-        List<RoomOptional> optionals = new ArrayList<>();
-        optionals.add(new AirConditioner());
-        optionals.add(new RoomServiceOptional());
-        return optionals;
-    }
 }

@@ -2,7 +2,7 @@ package it.unibz.room.optional;
 
 public class AirConditioner extends RoomOptional {
     @Override
-    public String getOptionalName() {
+    public String getName() {
         return "AC (Air Conditioner)";
     }
 
