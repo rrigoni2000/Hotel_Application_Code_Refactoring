@@ -29,11 +29,13 @@ public class Hotel {
         reservations = Deserializer.readReservations(new File(reservationsJsonFile));
     }
 
-    /**
-     * make reservation for a given room. Within the method, chose the room type
-     * @param i
-     */
+    public static void makeReservation(Reservation newReservation) {
+        // reservation not null, not already closed, not on a room taken, satisfies the requirements on list of customers
+        if(newReservation == null)
+            throw new RuntimeException("Invalid Reservation");
 
+
+    }
     /*
     static void bookRoom(int i)
     {
