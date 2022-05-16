@@ -14,7 +14,7 @@ public class Deluxe implements RoomType {
     }
 
     @Override
-    public double getDailyCostProPerson() {
+    public double getDailyCostPerPerson() {
         return 120.0;
     }
 
@@ -22,7 +22,6 @@ public class Deluxe implements RoomType {
     public List<RoomOptional> getDefaultRoomOptionals() {
         List<RoomOptional> optionals = new ArrayList<>();
         optionals.add(new AirConditioner());
-        optionals.add(new RoomService());
         return optionals;
     }
 }

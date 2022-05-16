@@ -7,7 +7,7 @@ import java.util.List;
 public interface RoomType {
     String getName();
 
-    double getDailyCostProPerson();
+    double getDailyCostPerPerson();
 
     List<RoomOptional> getDefaultRoomOptionals();
 }

@@ -32,7 +32,7 @@ public abstract class Room implements Serializable {
     }
 
     public double getCostPerDay() {
-        return this.roomType.getDailyCostProPerson() * this.quantity.getQuantity();
+        return this.roomType.getDailyCostPerPerson() * this.quantity.getQuantity();
     }
 
     public List<RoomOptional> getRoomOptionals() {

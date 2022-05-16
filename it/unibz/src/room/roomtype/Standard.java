@@ -12,7 +12,7 @@ public class Standard implements RoomType{
     }
 
     @Override
-    public double getDailyCostProPerson() {
+    public double getDailyCostPerPerson() {
         return 60.0;
     }
 

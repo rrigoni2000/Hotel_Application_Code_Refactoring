@@ -35,10 +35,10 @@ public class RoomTest {
 
     @Test
     public void costPerDayTest() {
-        assertEquals(new Deluxe().getDailyCostProPerson() * new Single().getQuantity(), deluxeSingleRoom.getCostPerDay());
-        assertEquals(new Deluxe().getDailyCostProPerson() * new Double().getQuantity(), deluxeDoubleRoom.getCostPerDay());
-        assertEquals(new Luxury().getDailyCostProPerson() * new Single().getQuantity(), luxurySingleRoom.getCostPerDay());
-        assertEquals(new Luxury().getDailyCostProPerson() * new Double().getQuantity(), luxuryDoubleRoom.getCostPerDay());
+        assertEquals(new Deluxe().getDailyCostPerPerson() * new Single().getQuantity(), deluxeSingleRoom.getCostPerDay());
+        assertEquals(new Deluxe().getDailyCostPerPerson() * new Double().getQuantity(), deluxeDoubleRoom.getCostPerDay());
+        assertEquals(new Luxury().getDailyCostPerPerson() * new Single().getQuantity(), luxurySingleRoom.getCostPerDay());
+        assertEquals(new Luxury().getDailyCostPerPerson() * new Double().getQuantity(), luxuryDoubleRoom.getCostPerDay());
     }
 
     @Test
