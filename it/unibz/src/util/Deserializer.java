@@ -7,16 +7,40 @@ import it.unibz.src.room.Room;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Deserializer {
 
-    public static List<Room> loadRoomsFromFile(String filePath) {
-        return null;
+    public static List<Room> readRooms(String content) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, List<Integer>> map = objectMapper.readValue(content, Map.class);
+
+        return readRooms(map);
     }
 
-    public static List<Reservation> readReservations(String singleReservationExample) throws IOException {
-        return new ObjectMapper().readValue(singleReservationExample, new TypeReference<List<Reservation>>(){});
+    public static List<Room> readRooms(Map<String, List<Integer>> map) {
+        List<Room> rooms = new ArrayList<>();
+
+        map.forEach((className, roomIDs) -> {
+            try {
+                Class<?> c = Class.forName(className);
+                for (int roomID: roomIDs) {
+                    Room newRoom = (Room) c.getConstructor(int.class).newInstance(roomID);
+                    rooms.add(newRoom);
+                }
+            } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        });
+        return rooms;
+    }
+
+    public static List<Reservation> readReservations(String content) throws IOException {
+        return new ObjectMapper().readValue(content, new TypeReference<List<Reservation>>(){});
     }
 
     public static List<Reservation> readReservations(File inputFile) {
