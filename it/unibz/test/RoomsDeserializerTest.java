@@ -43,7 +43,8 @@ public class RoomsDeserializerTest {
     public void deserializeFromSampleFile() throws IOException {
         List<Reservation> reservations = Deserializer.readReservations(new File("it/unibz/sample/sampleReservations.json"));
         List<Room> rooms = Deserializer.readRooms(new File("it/unibz/sample/sampleRooms.json"));
-        assertEquals(0, reservations.size());
+        assertEquals(0, reservations.get(0).getReservationID());
+        assertEquals(1, reservations.size());
         assertEquals(40, rooms.size());
     }
 }

@@ -13,8 +13,9 @@ public class Reservation {
     private final int roomID;
     private final List<Customer> customers;
     private List<Extra> extras;
+    private boolean closed = false;
 
-    public Reservation(@JsonProperty int reservationID, @JsonProperty("roomID") int roomID,
+    public Reservation(@JsonProperty("reservationID") int reservationID, @JsonProperty("roomID") int roomID,
                        @JsonProperty("customers") List<Customer> customers, @JsonProperty("extras") List<Extra> extras) {
         this.reservationID = reservationID;
         this.roomID = roomID;
@@ -39,6 +40,9 @@ public class Reservation {
     }
 
     public void addExtra(Extra newExtra) {
+        if(isClosed())
+            throw new RuntimeException("Reservation already closed");
+
         if(this.extras == null) {
             this.extras = new ArrayList<>();
         }
@@ -46,6 +50,14 @@ public class Reservation {
             throw new RuntimeException("Invalid Extra");
         else
             this.extras.add(newExtra);
+    }
+
+    public boolean isClosed() {
+        return this.closed;
+    }
+
+    public void close() {
+        this.closed = true;
     }
 
     @Override

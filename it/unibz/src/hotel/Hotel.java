@@ -1,14 +1,20 @@
 package it.unibz.src.hotel;
 
+import it.unibz.src.customer.Customer;
+import it.unibz.src.extra.Extra;
 import it.unibz.src.reservation.Reservation;
+import it.unibz.src.reservation.ReservationFactory;
+import it.unibz.src.reservation.ReservationService;
 import it.unibz.src.room.*;
 import it.unibz.src.util.Deserializer;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class Hotel {
 
@@ -22,6 +28,8 @@ public class Hotel {
      */
     public static List<Reservation> reservations;
 
+    private static int lastReservationID = -1;
+
     static Scanner sc = new Scanner(System.in);
 
     public static void initialize(String roomsJsonFile, String reservationsJsonFile) throws IOException {
@@ -29,12 +37,85 @@ public class Hotel {
         reservations = Deserializer.readReservations(new File(reservationsJsonFile));
     }
 
-    public static void makeReservation(Reservation newReservation) {
-        // reservation not null, not already closed, not on a room taken, satisfies the requirements on list of customers
-        if(newReservation == null)
-            throw new RuntimeException("Invalid Reservation");
+    public static void makeReservation(int roomID, List<Customer> customers) {
+        Room room = RoomService.getRoomByID(roomID, rooms);
+        if(!isRoomAvailable(room.getId()))
+            throw new RuntimeException("Room is not available");
+        else {
+            ReservationFactory factory = new ReservationFactory(getNextReservationID());
 
+            factory.setRoom(room);
+            customers.forEach(factory::addCustomer);
 
+            reservations.add(factory.get());
+        }
+    }
+
+    private static int getNextReservationID() {
+        if (lastReservationID < 0) {
+            lastReservationID = reservations.stream().map(Reservation::getReservationID).max(Integer::compareTo).orElse(-1);
+        }
+
+        return ++lastReservationID;
+    }
+
+    private static boolean isRoomAvailable(int roomID) {
+        Reservation tmp = reservations.stream()
+                .filter(res -> !res.isClosed() && res.getRoomID() == roomID).findAny().orElse(null);
+
+        return tmp == null;
+    }
+
+    public static List<Room> getAvailableRooms() {
+        List<Integer> openReservations = reservations.stream()
+                .filter(res -> !res.isClosed())
+                .map(Reservation::getRoomID)
+                .collect(Collectors.toList());
+        return rooms.stream()
+                .filter(room -> openReservations.contains(room.getId()))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> getRoomTypes() {
+        return RoomService.getRoomNames(rooms);
+    }
+
+    public static List<Class<? extends Room>> getAvailableRoomClasses() {
+        return RoomService.getAvailableRoomClasses(rooms);
+    }
+
+    public static String getRoomDetails(String roomName) {
+        return RoomService.getRoomDetails(roomName, rooms);
+    }
+
+    public static String getRoomDetails(Class<? extends Room> roomClass) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return RoomService.getRoomDetails(roomClass);
+    }
+
+    public static double getReservationCost(int reservationID) {
+        Reservation reservation = ReservationService.getReservationByID(reservationID, reservations);
+
+        AtomicReference<Double> tmp = new AtomicReference<>(0.0);
+
+        Room room = RoomService.getRoomByID(reservation.getRoomID(), rooms);
+        tmp.updateAndGet(v -> v + room.getCostPerDay());
+
+        reservation.getExtras().forEach(extra -> tmp.updateAndGet(v -> (v + extra.getUnitaryPrice())));
+
+        return tmp.get();
+    }
+
+    public static void closeReservation(int reservationID) {
+        Reservation reservation = ReservationService.getReservationByID(reservationID, reservations);
+        reservation.close();
+    }
+
+    public static void addExtraToReservation(int reservationID, Extra newExtra) {
+        Reservation reservation = ReservationService.getReservationByID(reservationID, reservations);
+        if(reservation.isClosed())
+            throw new RuntimeException("Cannot add extra to closed reservation");
+        else
+            reservation.addExtra(newExtra);
     }
     /*
     static void bookRoom(int i)
