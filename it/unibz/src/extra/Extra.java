@@ -1,10 +1,14 @@
 package it.unibz.src.extra;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Objects;
+
 public class Extra {
     private int code;
-    private int unitaryPrice;
+    private double unitaryPrice;
 
-    public Extra(int code, int unitaryPrice) {
+    public Extra(@JsonProperty("code") int code, @JsonProperty("unitaryPrice") double unitaryPrice) {
         this.code = code;
         this.unitaryPrice = unitaryPrice;
     }
@@ -13,7 +17,20 @@ public class Extra {
         return code;
     }
 
-    public int getUnitaryPrice() {
+    public double getUnitaryPrice() {
         return unitaryPrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Extra)) return false;
+        Extra extra = (Extra) o;
+        return getCode() == extra.getCode();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCode());
     }
 }

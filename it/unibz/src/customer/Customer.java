@@ -1,5 +1,7 @@
 package it.unibz.src.customer;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 public class Customer {
@@ -7,7 +9,7 @@ public class Customer {
     private String contact;
     private Gender gender;
 
-    public Customer(String name, String contact, Gender gender) {
+    public Customer(@JsonProperty("name") String name, @JsonProperty("contact") String contact, @JsonProperty("gender") Gender gender) {
         this.name = name;
         this.contact = contact;
         this.gender = gender;

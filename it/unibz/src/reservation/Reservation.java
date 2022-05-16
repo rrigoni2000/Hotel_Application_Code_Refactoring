@@ -1,5 +1,6 @@
 package it.unibz.src.reservation;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import it.unibz.src.customer.Customer;
 import it.unibz.src.extra.Extra;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class Reservation {
     private List<Customer> customers;
     private List<Extra> extras;
 
-    public Reservation(int roomID, List<Customer> customers, List<Extra> extras) {
+    public Reservation(@JsonProperty("roomID") int roomID, @JsonProperty("customers") List<Customer> customers, @JsonProperty("extras") List<Extra> extras) {
         this.roomID = roomID;
         this.customers = customers;
         this.extras = extras;

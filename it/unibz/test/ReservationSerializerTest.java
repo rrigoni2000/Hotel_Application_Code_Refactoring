@@ -2,6 +2,7 @@ package it.unibz.test;
 
 import it.unibz.src.customer.Customer;
 import it.unibz.src.customer.Gender;
+import it.unibz.src.extra.Extra;
 import it.unibz.src.reservation.Reservation;
 import it.unibz.src.reservation.ReservationFactory;
 import it.unibz.src.room.LuxuryDoubleRoom;
@@ -34,6 +35,7 @@ public class ReservationSerializerTest {
         Customer customer = new Customer("Riccardo", "r.r@gmail.com", Gender.Male);
 
         Reservation _1 = new ReservationFactory().setRoom(room).addCustomer(customer).get();
+        _1.addExtra(new Extra(1,2.0));
         reservations.add(_1);
         ReservationSerializer.serialize(reservations, "testSerialization.json");
     }
