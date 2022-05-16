@@ -98,9 +98,9 @@ public class Hotel {
         AtomicReference<Double> tmp = new AtomicReference<>(0.0);
 
         Room room = RoomService.getRoomByID(reservation.getRoomID(), rooms);
-        tmp.updateAndGet(v -> v + room.getCostPerDay());
+        tmp.updateAndGet(v -> v + room.getCostPerDay() * room.getQuantity().getQuantity());
 
-        reservation.getExtras().forEach(extra -> tmp.updateAndGet(v -> (v + extra.getUnitaryPrice())));
+        reservation.getExtras().forEach(extra -> tmp.updateAndGet(v -> v + extra.getUnitaryPrice()));
 
         return tmp.get();
     }
