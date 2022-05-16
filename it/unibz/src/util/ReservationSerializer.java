@@ -6,26 +6,15 @@ import it.unibz.src.reservation.Reservation;
 import java.io.*;
 import java.util.List;
 
-/**
- * gets as input the list of reservations
- */
-public class ReservationSerializer implements Runnable {
+public class ReservationSerializer {
 
-    List<Reservation> reservations;
-
-    public ReservationSerializer(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
-
-    @Override
-    public void run() {
+    public static void serialize(List<Reservation> reservations, String outputFilePath) throws IOException {
         try{
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(new BufferedWriter(new FileWriter("reservationsBackup.json")), this.reservations);
+            objectMapper.writeValue(new BufferedWriter(new FileWriter(outputFilePath)), reservations);
         } catch (IOException e) {
             e.printStackTrace();
+            throw e;
         }
-
     }
-
 }

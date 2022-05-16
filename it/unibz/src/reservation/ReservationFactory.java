@@ -16,17 +16,19 @@ public class ReservationFactory {
         this.customers = new ArrayList<>();
     }
 
-    public void setRoom(Room room) {
+    public ReservationFactory setRoom(Room room) {
         this.room = room;
+        return this;
     }
 
-    public void addCustomer(Customer newCustomer) {
+    public ReservationFactory addCustomer(Customer newCustomer) {
         if(newCustomer == null)
             throw new RuntimeException("Invalid Null Customer");
         if(this.customers.contains(newCustomer))
             ;
         else
             this.customers.add(newCustomer);
+        return this;
     }
 
     public Reservation get() {

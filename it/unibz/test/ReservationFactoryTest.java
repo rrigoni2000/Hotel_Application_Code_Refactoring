@@ -25,10 +25,8 @@ public class ReservationFactoryTest {
     public void createCorrectReservation(){
         Room room = new DeluxeSingleRoom(101);
         Customer customer = new Customer("Riccardo", "simple@email.com", Gender.Male);
-        factory.setRoom(room);
-        factory.addCustomer(customer);
+        Reservation reservation = factory.setRoom(room).addCustomer(customer).get();
 
-        Reservation reservation = factory.get();
         assertEquals(101, reservation.getRoomID());
         assertEquals(0, reservation.getExtras().size());
         assertEquals(1, reservation.getCustomers().size());
@@ -43,11 +41,11 @@ public class ReservationFactoryTest {
     @Test
     public void addDuplicateCustomerTest(){
         Room room = new DeluxeSingleRoom();
-        factory.setRoom(room);
-        factory.addCustomer(new Customer("Riccardo", "aa@gmail.com", Gender.Male));
-        factory.addCustomer(new Customer("Riccardo", "aa@gmail.com", Gender.Male));
+        Reservation reservation = factory.setRoom(room)
+            .addCustomer(new Customer("Riccardo", "aa@gmail.com", Gender.Male))
+            .addCustomer(new Customer("Riccardo", "aa@gmail.com", Gender.Male))
+            .get();
 
-        Reservation reservation = factory.get();
         assertEquals(1, reservation.getCustomers().size());
     }
 
