@@ -2,7 +2,10 @@ package it.unibz.src.hotel;
 
 import it.unibz.src.reservation.Reservation;
 import it.unibz.src.room.*;
+import it.unibz.src.util.Deserializer;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,45 +15,18 @@ public class Hotel {
     /**
      * rooms that are in the hotel. Defined at compilation time for the moment. Then use reflection.
      */
-   public static List<Room> rooms = getPredefinedRooms();
+   public static List<Room> rooms;
 
     /**
      * reservations: interact with reservations to obtain information
      */
-    static List<Reservation> reservations = loadReservations();
+    public static List<Reservation> reservations;
 
     static Scanner sc = new Scanner(System.in);
 
-    /**
-     * creates a new hotel with no reservations for the set of rooms
-     */
-    private static List<Reservation> loadReservations() {
-        return new ArrayList<>();
-    }
-
-    private static List<Room> getPredefinedRooms() {
-        List<Room> rooms = new ArrayList<>();
-        for(int i = 0; i < 10; i++)
-            rooms.add(new LuxurySingleRoom());
-
-        for(int i = 0; i < 20; i++)
-            rooms.add(new DeluxeSingleRoom());
-
-        for(int i = 0; i < 10; i++)
-            rooms.add(new LuxuryDoubleRoom());
-
-        for(int i = 0; i < 20; i++)
-            rooms.add(new DeluxeDoubleRoom());
-
-        return rooms;
-    }
-
-    public static void loadRoomsFromFile(String fileName) {
-
-    }
-
-    public static void loadReservationsFromFile(String fileName) {
-
+    public static void initialize(String roomsJsonFile, String reservationsJsonFile) throws IOException {
+        rooms = Deserializer.readRooms(new File(roomsJsonFile));
+        reservations = Deserializer.readReservations(new File(reservationsJsonFile));
     }
 
     /**
