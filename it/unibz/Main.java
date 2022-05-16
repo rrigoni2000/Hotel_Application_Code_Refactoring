@@ -1,13 +1,5 @@
 package it.unibz;
 
-import it.unibz.hotel.Hotel;
-import it.unibz.room.Room;
-import it.unibz.room.RoomService;
-import it.unibz.util.Serializer;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.*;
 
 public class Main {

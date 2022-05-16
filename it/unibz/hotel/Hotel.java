@@ -1,7 +1,5 @@
 package it.unibz.hotel;
 
-import it.unibz.exception.NotAvailable;
-import it.unibz.extra.Food;
 import it.unibz.reservation.Reservation;
 import it.unibz.room.*;
 
@@ -59,6 +57,8 @@ public class Hotel {
      * make reservation for a given room. Within the method, chose the room type
      * @param i
      */
+
+    /*
     static void bookRoom(int i)
     {
         int j;
@@ -194,10 +194,13 @@ public class Hotel {
         }
     }
 
+     */
+
     /**
      * search the description via class name
      * @param roomType
      */
+    /*
     static String getRoomFeatures(Class< ? extends Room> roomType) {
 
         Room match = rooms.stream().filter(room -> room.getClass().equals(roomType)).findFirst().orElse(null);
@@ -435,4 +438,6 @@ public class Hotel {
             System.out.println("Cannot be done");
         }
     }
+
+     */
 }

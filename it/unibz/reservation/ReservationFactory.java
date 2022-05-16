@@ -13,7 +13,6 @@ public class ReservationFactory {
     private List<Customer> customers;
 
     public ReservationFactory() {
-        this.reservation = new Reservation();
         this.customers = new ArrayList<>();
     }
 
@@ -40,7 +39,7 @@ public class ReservationFactory {
         else {
             // populate the Reservation with the provided Customers
             this.customers.stream().forEach((customer) -> this.reservation.getCustomers().add(customer));
-            return this.reservation;
+            return new Reservation(this.room.getId(), this.customers, new ArrayList<>());
         }
     }
 }

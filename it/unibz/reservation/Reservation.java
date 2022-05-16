@@ -2,18 +2,22 @@ package it.unibz.reservation;
 
 import it.unibz.customer.Customer;
 import it.unibz.extra.Extra;
-import it.unibz.room.Room;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Reservation {
-    private Room room;
+    private int roomID;
     private List<Customer> customers;
     private List<Extra> extras;
 
-    public Room getRoom() {
-        return room;
+    public Reservation(int roomID, List<Customer> customers, List<Extra> extras) {
+        this.roomID = roomID;
+        this.customers = customers;
+        this.extras = extras;
+    }
+
+    public int getRoomID() {
+        return this.roomID;
     }
 
     public List<Customer> getCustomers() {
