@@ -43,13 +43,13 @@ public abstract class Room implements Serializable {
 
         StringBuilder builder = new StringBuilder();
 
-        builder.append("Room: " + this.getRoomName() + "\n");
-        builder.append("Person: " + this.quantity.getQuantity() + "\n");
-        builder.append("Price per day: " + this.getCostPerDay() + "\n");
+        builder.append("Room: ").append(this.getRoomName()).append("\n");
+        builder.append("Person: ").append(this.quantity.getQuantity()).append("\n");
+        builder.append("Price per day: ").append(this.getCostPerDay()).append("\n");
 
         builder.append("\n");
-        this.getRoomOptionals().stream().forEach(optional -> builder.append(optional.getName() + " at " +
-                optional.getAdditionalCost() + " euro per day"));
+        this.getRoomOptionals().forEach(optional -> builder.append(optional.getName()).append(" at ")
+                .append(optional.getAdditionalCost()).append(" euro per day").append("\n"));
 
         return builder.toString();
     }
