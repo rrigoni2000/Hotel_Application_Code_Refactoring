@@ -14,8 +14,8 @@ public abstract class Room implements Serializable {
      * unique identifier for the Room
      */
     private int id;
-    private RoomType roomType = getRoomType();
-    private Quantity quantity = getQuantity();
+    private final RoomType roomType = getRoomType();
+    private final Quantity quantity = getQuantity();
 
     public Room(int id) {
         this.id = id;

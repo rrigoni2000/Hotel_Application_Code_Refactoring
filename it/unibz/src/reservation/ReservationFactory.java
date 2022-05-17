@@ -12,8 +12,11 @@ public class ReservationFactory {
     private Room room;
     private List<Customer> customers;
 
-    public ReservationFactory() {
+    private int reservationID;
+
+    public ReservationFactory(int reservationID) {
         this.customers = new ArrayList<>();
+        this.reservationID = reservationID;
     }
 
     public ReservationFactory setRoom(Room room) {
@@ -39,7 +42,7 @@ public class ReservationFactory {
         else if(this.customers.size() > this.room.getQuantity().getQuantity())
             throw new RuntimeException("Too many Customers");
         else {
-            return new Reservation(this.room.getId(), this.customers, new ArrayList<>());
+            return new Reservation(this.reservationID, this.room.getId(), this.customers, new ArrayList<>());
         }
     }
 }

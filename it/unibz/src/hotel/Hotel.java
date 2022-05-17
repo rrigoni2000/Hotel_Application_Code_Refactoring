@@ -1,63 +1,122 @@
 package it.unibz.src.hotel;
 
+import it.unibz.src.customer.Customer;
+import it.unibz.src.extra.Extra;
 import it.unibz.src.reservation.Reservation;
+import it.unibz.src.reservation.ReservationFactory;
+import it.unibz.src.reservation.ReservationService;
 import it.unibz.src.room.*;
+import it.unibz.src.util.Deserializer;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class Hotel {
 
     /**
      * rooms that are in the hotel. Defined at compilation time for the moment. Then use reflection.
      */
-   public static List<Room> rooms = getPredefinedRooms();
+   public static List<Room> rooms;
 
     /**
      * reservations: interact with reservations to obtain information
      */
-    static List<Reservation> reservations = loadReservations();
+    public static List<Reservation> reservations;
+
+    private static int lastReservationID = -1;
 
     static Scanner sc = new Scanner(System.in);
 
-    /**
-     * creates a new hotel with no reservations for the set of rooms
-     */
-    private static List<Reservation> loadReservations() {
-        return new ArrayList<>();
+    public static void initialize(String roomsJsonFile, String reservationsJsonFile) throws IOException {
+        rooms = Deserializer.readRooms(new File(roomsJsonFile));
+        reservations = Deserializer.readReservations(new File(reservationsJsonFile));
     }
 
-    private static List<Room> getPredefinedRooms() {
-        List<Room> rooms = new ArrayList<>();
-        for(int i = 0; i < 10; i++)
-            rooms.add(new LuxurySingleRoom());
+    public static void makeReservation(int roomID, List<Customer> customers) {
+        Room room = RoomService.getRoomByID(roomID, rooms);
+        if(!isRoomAvailable(room.getId()))
+            throw new RuntimeException("Room is not available");
+        else {
+            ReservationFactory factory = new ReservationFactory(getNextReservationID());
 
-        for(int i = 0; i < 20; i++)
-            rooms.add(new DeluxeSingleRoom());
+            factory.setRoom(room);
+            customers.forEach(factory::addCustomer);
 
-        for(int i = 0; i < 10; i++)
-            rooms.add(new LuxuryDoubleRoom());
-
-        for(int i = 0; i < 20; i++)
-            rooms.add(new DeluxeDoubleRoom());
-
-        return rooms;
+            reservations.add(factory.get());
+        }
     }
 
-    public static void loadRoomsFromFile(String fileName) {
+    private static int getNextReservationID() {
+        if (lastReservationID < 0) {
+            lastReservationID = reservations.stream().map(Reservation::getReservationID).max(Integer::compareTo).orElse(-1);
+        }
 
+        return ++lastReservationID;
     }
 
-    public static void loadReservationsFromFile(String fileName) {
+    private static boolean isRoomAvailable(int roomID) {
+        Reservation tmp = reservations.stream()
+                .filter(res -> !res.isClosed() && res.getRoomID() == roomID).findAny().orElse(null);
 
+        return tmp == null;
     }
 
-    /**
-     * make reservation for a given room. Within the method, chose the room type
-     * @param i
-     */
+    public static List<Room> getAvailableRooms() {
+        List<Integer> openReservations = reservations.stream()
+                .filter(res -> !res.isClosed())
+                .map(Reservation::getRoomID)
+                .collect(Collectors.toList());
+        return rooms.stream()
+                .filter(room -> openReservations.contains(room.getId()))
+                .collect(Collectors.toList());
+    }
 
+    public static List<String> getRoomTypes() {
+        return RoomService.getRoomNames(rooms);
+    }
+
+    public static List<Class<? extends Room>> getAvailableRoomClasses() {
+        return RoomService.getAvailableRoomClasses(rooms);
+    }
+
+    public static String getRoomDetails(String roomName) {
+        return RoomService.getRoomDetails(roomName, rooms);
+    }
+
+    public static String getRoomDetails(Class<? extends Room> roomClass) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return RoomService.getRoomDetails(roomClass);
+    }
+
+    public static double getReservationCost(int reservationID) {
+        Reservation reservation = ReservationService.getReservationByID(reservationID, reservations);
+
+        AtomicReference<Double> tmp = new AtomicReference<>(0.0);
+
+        Room room = RoomService.getRoomByID(reservation.getRoomID(), rooms);
+        tmp.updateAndGet(v -> v + room.getCostPerDay() * room.getQuantity().getQuantity());
+
+        reservation.getExtras().forEach(extra -> tmp.updateAndGet(v -> v + extra.getUnitaryPrice()));
+
+        return tmp.get();
+    }
+
+    public static void closeReservation(int reservationID) {
+        Reservation reservation = ReservationService.getReservationByID(reservationID, reservations);
+        reservation.close();
+    }
+
+    public static void addExtraToReservation(int reservationID, Extra newExtra) {
+        Reservation reservation = ReservationService.getReservationByID(reservationID, reservations);
+        if(reservation.isClosed())
+            throw new RuntimeException("Cannot add extra to closed reservation");
+        else
+            reservation.addExtra(newExtra);
+    }
     /*
     static void bookRoom(int i)
     {

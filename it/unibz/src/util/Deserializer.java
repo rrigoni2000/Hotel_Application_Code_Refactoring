@@ -5,15 +5,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unibz.src.reservation.Reservation;
 import it.unibz.src.room.Room;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Deserializer {
+
+    // read file content, then pass as the string
+    public static List<Room> readRooms(File inputFile) throws IOException {
+
+        String content = readFileContent(inputFile);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, List<Integer>> map = objectMapper.readValue(content, Map.class);
+
+        return readRooms(map);
+    }
 
     public static List<Room> readRooms(String content) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -43,7 +52,18 @@ public class Deserializer {
         return new ObjectMapper().readValue(content, new TypeReference<List<Reservation>>(){});
     }
 
-    public static List<Reservation> readReservations(File inputFile) {
-        return null;
+    public static List<Reservation> readReservations(File inputFile) throws IOException {
+        String content = readFileContent(inputFile);
+
+        return readReservations(content);
+    }
+
+    private static String readFileContent(File inputFile) throws FileNotFoundException {
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+
+        StringBuilder builder = new StringBuilder();
+        reader.lines().forEachOrdered(str -> builder.append(str));
+
+        return builder.toString();
     }
 }

@@ -14,11 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ReservationFactoryTest {
-    private ReservationFactory factory = new ReservationFactory();
+    private ReservationFactory factory = new ReservationFactory(0);
 
     @BeforeEach
     public void setup(){
-        this.factory = new ReservationFactory();
+        this.factory = new ReservationFactory(0);
     }
 
     @Test

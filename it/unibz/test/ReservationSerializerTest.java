@@ -5,7 +5,7 @@ import it.unibz.src.customer.Gender;
 import it.unibz.src.extra.Extra;
 import it.unibz.src.reservation.Reservation;
 import it.unibz.src.reservation.ReservationFactory;
-import it.unibz.src.room.LuxuryDoubleRoom;
+import it.unibz.src.room.LuxurySingleRoom;
 import it.unibz.src.room.Room;
 import it.unibz.src.util.ReservationSerializer;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,11 +30,11 @@ public class ReservationSerializerTest {
 
     @Test
     public void simpleTest() throws IOException {
-        Room room = new LuxuryDoubleRoom(101);
+        Room room = new LuxurySingleRoom(1);
         List<Reservation> reservations = new ArrayList<>();
         Customer customer = new Customer("Riccardo", "r.r@gmail.com", Gender.Male);
 
-        Reservation _1 = new ReservationFactory().setRoom(room).addCustomer(customer).get();
+        Reservation _1 = new ReservationFactory(0).setRoom(room).addCustomer(customer).get();
         _1.addExtra(new Extra(1,2.0));
         reservations.add(_1);
         ReservationSerializer.serialize(reservations, "testSerialization.json");

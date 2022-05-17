@@ -1,30 +1,40 @@
 package it.unibz.src.room;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RoomService {
 
-    public static Map<Integer,String> getRoomNames(List<Room> rooms) {
-
-        AtomicInteger counter = new AtomicInteger(1);
-        Set<String> roomNames = rooms.stream().map(Room::getRoomName).collect(Collectors.toSet());
-        Map<Integer,String> numberedNames = new HashMap<>();
-
-        roomNames.forEach(name -> numberedNames.put(counter.getAndIncrement(),name));
-        return numberedNames;
+    public static List<String> getRoomNames(List<Room> rooms) {
+        if(rooms == null)
+            throw new RuntimeException("Invalid list of Rooms");
+        return rooms.stream().map(Room::getRoomName).distinct().collect(Collectors.toList());
     }
 
-    public static String getRoomDetailsByRoomName(String roomName, List<Room> rooms) {
+    public static String getRoomDetails(Class<? extends Room> roomClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        return roomClass.getConstructor().newInstance().getRoomDetails();
+    }
+
+    public static String getRoomDetails(String roomName, List<Room> rooms) {
         Room match = rooms.stream().filter(room -> room.getRoomName().equals(roomName)).findFirst().orElse(null);
 
         if(match == null)
             throw new RuntimeException("No matching room names");
         else
             return match.getRoomDetails();
+    }
+
+    public static List<Class<? extends Room>> getAvailableRoomClasses(List<Room> rooms) {
+        return rooms.stream().map(Room::getClass).distinct().collect(Collectors.toList());
+    }
+
+    public static Room getRoomByID(int roomID, List<Room> rooms) {
+        Room match = rooms.stream().filter(room -> room.getId() == roomID).findFirst().orElse(null);
+
+        if(match == null)
+            throw new RuntimeException("No given room with the provided id");
+        else
+            return match;
     }
 }
