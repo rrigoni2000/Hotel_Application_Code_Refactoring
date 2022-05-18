@@ -18,10 +18,8 @@ public class Deserializer {
     public static List<Room> readRooms(File inputFile) throws IOException {
 
         String content = readFileContent(inputFile);
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, List<Integer>> map = objectMapper.readValue(content, Map.class);
 
-        return readRooms(map);
+        return readRooms(content);
     }
 
     public static List<Room> readRooms(String content) throws IOException {
@@ -62,7 +60,7 @@ public class Deserializer {
         BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 
         StringBuilder builder = new StringBuilder();
-        reader.lines().forEachOrdered(str -> builder.append(str));
+        reader.lines().forEachOrdered(builder::append);
 
         return builder.toString();
     }

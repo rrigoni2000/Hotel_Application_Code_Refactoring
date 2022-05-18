@@ -28,6 +28,8 @@ public class Hotel {
      */
     public static List<Reservation> reservations;
 
+    public static List<Extra> extra;
+
     private static int lastReservationID = -1;
 
     static Scanner sc = new Scanner(System.in);
@@ -60,19 +62,24 @@ public class Hotel {
     }
 
     private static boolean isRoomAvailable(int roomID) {
+        Integer match = rooms.stream().map(Room::getId).filter(id -> id == roomID).findAny().orElse(null);
+        if (match == null)
+            throw new RuntimeException("Invalid Room ID");
+
         Reservation tmp = reservations.stream()
                 .filter(res -> !res.isClosed() && res.getRoomID() == roomID).findAny().orElse(null);
 
         return tmp == null;
     }
 
-    public static List<Room> getAvailableRooms() {
-        List<Integer> openReservations = reservations.stream()
+    public static List<Integer> getAvailableRooms() {
+        List<Integer> notAvailableRooms = reservations.stream()
                 .filter(res -> !res.isClosed())
                 .map(Reservation::getRoomID)
                 .collect(Collectors.toList());
         return rooms.stream()
-                .filter(room -> openReservations.contains(room.getId()))
+                .map(Room::getId)
+                .filter(id -> !notAvailableRooms.contains(id))
                 .collect(Collectors.toList());
     }
 
