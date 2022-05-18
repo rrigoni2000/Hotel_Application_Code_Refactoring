@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
 public class Extra {
-    private int code;
-    private double unitaryPrice;
+    private final int code;
+    private final double unitaryPrice;
 
     public Extra(@JsonProperty("code") int code, @JsonProperty("unitaryPrice") double unitaryPrice) {
         this.code = code;

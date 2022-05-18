@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RoomService {
+public class RoomRepository {
 
     public static List<String> getRoomNames(List<Room> rooms) {
         if(rooms == null)

@@ -40,7 +40,7 @@ public class Hotel {
     }
 
     public static void makeReservation(int roomID, List<Customer> customers) {
-        Room room = RoomService.getRoomByID(roomID, rooms);
+        Room room = RoomRepository.getRoomByID(roomID, rooms);
         if(!isRoomAvailable(room.getId()))
             throw new RuntimeException("Room is not available");
         else {
@@ -84,19 +84,19 @@ public class Hotel {
     }
 
     public static List<String> getRoomTypes() {
-        return RoomService.getRoomNames(rooms);
+        return RoomRepository.getRoomNames(rooms);
     }
 
     public static List<Class<? extends Room>> getAvailableRoomClasses() {
-        return RoomService.getAvailableRoomClasses(rooms);
+        return RoomRepository.getAvailableRoomClasses(rooms);
     }
 
     public static String getRoomDetails(String roomName) {
-        return RoomService.getRoomDetails(roomName, rooms);
+        return RoomRepository.getRoomDetails(roomName, rooms);
     }
 
     public static String getRoomDetails(Class<? extends Room> roomClass) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return RoomService.getRoomDetails(roomClass);
+        return RoomRepository.getRoomDetails(roomClass);
     }
 
     public static double getReservationCost(int reservationID) {
@@ -104,7 +104,7 @@ public class Hotel {
 
         AtomicReference<Double> tmp = new AtomicReference<>(0.0);
 
-        Room room = RoomService.getRoomByID(reservation.getRoomID(), rooms);
+        Room room = RoomRepository.getRoomByID(reservation.getRoomID(), rooms);
         tmp.updateAndGet(v -> v + room.getCostPerDay() * room.getQuantity().getQuantity());
 
         reservation.getExtras().forEach(extra -> tmp.updateAndGet(v -> v + extra.getUnitaryPrice()));

@@ -1,7 +1,7 @@
 package it.unibz.test;
 
 import it.unibz.src.room.Room;
-import it.unibz.src.room.RoomService;
+import it.unibz.src.room.RoomRepository;
 import it.unibz.src.util.Deserializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,14 +23,14 @@ public class RoomServiceTest {
 
     @Test
     public void getRoomNamesTest() {
-        List<String> roomNames = RoomService.getRoomNames(this.rooms);
+        List<String> roomNames = RoomRepository.getRoomNames(this.rooms);
         assertEquals(roomNames.size(),4);
     }
 
     @Test
     public void getRoomDetails() {
-        List<String> roomNames = RoomService.getRoomNames(this.rooms);
-        String roomDetails = RoomService.getRoomDetails(roomNames.get(0), this.rooms);
+        List<String> roomNames = RoomRepository.getRoomNames(this.rooms);
+        String roomDetails = RoomRepository.getRoomDetails(roomNames.get(0), this.rooms);
         System.out.println(roomDetails);
     }
 }
