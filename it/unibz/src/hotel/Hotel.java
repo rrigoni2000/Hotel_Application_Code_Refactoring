@@ -28,6 +28,8 @@ public class Hotel {
      */
     public static List<Reservation> reservations;
 
+    public static List<Extra> extra;
+
     private static int lastReservationID = -1;
 
     static Scanner sc = new Scanner(System.in);
@@ -38,7 +40,7 @@ public class Hotel {
     }
 
     public static void makeReservation(int roomID, List<Customer> customers) {
-        Room room = RoomService.getRoomByID(roomID, rooms);
+        Room room = RoomRepository.getRoomByID(roomID, rooms);
         if(!isRoomAvailable(room.getId()))
             throw new RuntimeException("Room is not available");
         else {
@@ -60,36 +62,41 @@ public class Hotel {
     }
 
     private static boolean isRoomAvailable(int roomID) {
+        Integer match = rooms.stream().map(Room::getId).filter(id -> id == roomID).findAny().orElse(null);
+        if (match == null)
+            throw new RuntimeException("Invalid Room ID");
+
         Reservation tmp = reservations.stream()
                 .filter(res -> !res.isClosed() && res.getRoomID() == roomID).findAny().orElse(null);
 
         return tmp == null;
     }
 
-    public static List<Room> getAvailableRooms() {
-        List<Integer> openReservations = reservations.stream()
+    public static List<Integer> getAvailableRooms() {
+        List<Integer> notAvailableRooms = reservations.stream()
                 .filter(res -> !res.isClosed())
                 .map(Reservation::getRoomID)
                 .collect(Collectors.toList());
         return rooms.stream()
-                .filter(room -> openReservations.contains(room.getId()))
+                .map(Room::getId)
+                .filter(id -> !notAvailableRooms.contains(id))
                 .collect(Collectors.toList());
     }
 
     public static List<String> getRoomTypes() {
-        return RoomService.getRoomNames(rooms);
+        return RoomRepository.getRoomNames(rooms);
     }
 
     public static List<Class<? extends Room>> getAvailableRoomClasses() {
-        return RoomService.getAvailableRoomClasses(rooms);
+        return RoomRepository.getAvailableRoomClasses(rooms);
     }
 
     public static String getRoomDetails(String roomName) {
-        return RoomService.getRoomDetails(roomName, rooms);
+        return RoomRepository.getRoomDetails(roomName, rooms);
     }
 
     public static String getRoomDetails(Class<? extends Room> roomClass) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return RoomService.getRoomDetails(roomClass);
+        return RoomRepository.getRoomDetails(roomClass);
     }
 
     public static double getReservationCost(int reservationID) {
@@ -97,7 +104,7 @@ public class Hotel {
 
         AtomicReference<Double> tmp = new AtomicReference<>(0.0);
 
-        Room room = RoomService.getRoomByID(reservation.getRoomID(), rooms);
+        Room room = RoomRepository.getRoomByID(reservation.getRoomID(), rooms);
         tmp.updateAndGet(v -> v + room.getCostPerDay() * room.getQuantity().getQuantity());
 
         reservation.getExtras().forEach(extra -> tmp.updateAndGet(v -> v + extra.getUnitaryPrice()));

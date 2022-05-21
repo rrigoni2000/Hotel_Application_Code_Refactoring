@@ -12,7 +12,7 @@ public class Reservation {
     private final int reservationID;
     private final int roomID;
     private final List<Customer> customers;
-    private List<Extra> extras;
+    private List<Integer> extras;
     private boolean closed = false;
 
     public Reservation(@JsonProperty("reservationID") int reservationID, @JsonProperty("roomID") int roomID,
@@ -35,11 +35,11 @@ public class Reservation {
         return customers;
     }
 
-    public List<Extra> getExtras() {
+    public List<Integer> getExtras() {
         return this.extras;
     }
 
-    public void addExtra(Extra newExtra) {
+    public void addExtra(int newExtra) {
         if(isClosed())
             throw new RuntimeException("Reservation already closed");
 
