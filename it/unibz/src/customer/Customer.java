@@ -39,4 +39,12 @@ public class Customer {
     public int hashCode() {
         return Objects.hash(getName(), getGender());
     }
+
+    public String getCustomerDetails() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Name: ").append(this.name).append("\n");
+        builder.append("Gender: ").append(this.gender).append("\n");
+        builder.append("Contact: ").append(this.contact).append("\n");
+        return builder.toString();
+    }
 }

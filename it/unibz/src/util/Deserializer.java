@@ -2,6 +2,7 @@ package it.unibz.src.util;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.unibz.src.extra.Extra;
 import it.unibz.src.reservation.Reservation;
 import it.unibz.src.room.Room;
 
@@ -54,6 +55,16 @@ public class Deserializer {
         String content = readFileContent(inputFile);
 
         return readReservations(content);
+    }
+
+    public static List<Extra> readExtras(File inputFile) throws IOException {
+        String content = readFileContent(inputFile);
+
+        return readExtras(content);
+    }
+
+    public static List<Extra> readExtras(String content) throws IOException {
+        return new ObjectMapper().readValue(content, new TypeReference<List<Extra>>(){});
     }
 
     private static String readFileContent(File inputFile) throws FileNotFoundException {

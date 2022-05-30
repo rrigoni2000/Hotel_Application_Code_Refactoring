@@ -1,4 +1,4 @@
-package it.unibz.test;
+package it.unibz.test.serializer;
 
 import it.unibz.src.reservation.Reservation;
 import it.unibz.src.room.Room;
@@ -17,8 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class RoomsDeserializerTest {
 
 
-    private final String sampleMapStr = "{\"it.unibz.src.room.DeluxeDoubleRoom\":[2],\"it.unibz.src.room.LuxuryDoubleRoom\":[1]}";
-
     @Test
     public void deserializeSingleRoom() {
         Map<String, List<Integer>> roomMap = new HashMap<>();
@@ -34,6 +32,7 @@ public class RoomsDeserializerTest {
 
     @Test
     public void deserializeFromString() throws IOException {
+        String sampleMapStr = "{\"it.unibz.src.room.DeluxeDoubleRoom\":[2],\"it.unibz.src.room.LuxuryDoubleRoom\":[1]}";
         List<Room> rooms = Deserializer.readRooms(sampleMapStr);
 
         assertEquals(2, rooms.size());

@@ -43,10 +43,10 @@ public class RoomTest {
 
     @Test
     public void roomOptionalsTest() {
-        assertEquals(2, deluxeDoubleRoom.getRoomOptionals().size());
-        assertEquals(1, luxuryDoubleRoom.getRoomOptionals().size());
+        assertEquals(1, deluxeDoubleRoom.getRoomOptionals().size());
+        assertEquals(2, luxuryDoubleRoom.getRoomOptionals().size());
 
         assertTrue(deluxeSingleRoom.getRoomOptionals().contains(new AirConditioner()));
-        assertFalse(luxuryDoubleRoom.getRoomOptionals().contains(new RoomService()));
+        assertTrue(luxuryDoubleRoom.getRoomOptionals().contains(new RoomService()));
     }
 }

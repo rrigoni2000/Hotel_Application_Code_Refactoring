@@ -54,33 +54,6 @@ public abstract class Room implements Serializable {
         return builder.toString();
     }
 
-    /*
-    public void addCustomer(Customer newCustomer) {
-        if(newCustomer == null) {
-            throw new RuntimeException("Invalid Customer");
-        }
-        else if(this.customers.size() >= this.roomCapacity) {
-            throw new RuntimeException("Room is full");
-        }
-        else if(this.customers.contains(newCustomer)) {
-            throw new RuntimeException("Customer already there");
-        }
-        else
-            this.customers.add(newCustomer);
-    }
-
-    public Customer removeCustomer(Customer customer) {
-        if(customer == null)
-            throw new RuntimeException("Customer cannot be null");
-        else if(this.customers.contains(customer)) {
-            this.customers.remove(customer);
-            return customer;
-        }
-        else
-            throw new RuntimeException("Customer " + customer.toString() + " not assigned for the room");
-    }
-     */
-
     /** getters */
     public int getId() {
         return id;

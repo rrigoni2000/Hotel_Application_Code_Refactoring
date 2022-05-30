@@ -1,36 +1,34 @@
 package it.unibz.src.extra;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
-import java.util.Objects;
+public class ExtraRepository {
 
-public class Extra {
-    private final int code;
-    private final double unitaryPrice;
-
-    public Extra(@JsonProperty("code") int code, @JsonProperty("unitaryPrice") double unitaryPrice) {
-        this.code = code;
-        this.unitaryPrice = unitaryPrice;
+    private static List<Extra> extras;
+    public static void init(List<Extra> inputExtras) {
+        extras = inputExtras;
     }
 
-    public int getCode() {
-        return code;
+    public static Extra getExtraByID(int extraID) {
+        isRepoInitialized();
+
+        return extras.stream().filter(extra -> extra.getCode() == extraID).findAny()
+                .orElseThrow(() -> new RuntimeException("Invalid ID for extra"));
     }
 
-    public double getUnitaryPrice() {
-        return unitaryPrice;
+    public static Double getPriceFromExtraID(Integer extraID) {
+        isRepoInitialized();
+        return extras.stream().filter(extra -> extra.getCode() == extraID).map(Extra::getUnitaryPrice).findAny()
+                .orElseThrow(() -> new RuntimeException("Invalid ID for extra"));
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Extra)) return false;
-        Extra extra = (Extra) o;
-        return getCode() == extra.getCode();
+    private static void isRepoInitialized() {
+        if(extras == null || extras.isEmpty())
+            throw new RuntimeException("Initialize the Repository first");
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getCode());
+    public static String getExtraDetails(Integer extraID) {
+        Extra extra = ExtraRepository.getExtraByID(extraID);
+        return extra.getExtraDetails();
     }
 }

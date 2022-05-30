@@ -1,30 +1,56 @@
 package it.unibz.src.reservation;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ReservationRepository {
-	
-	public static List<String> getReservationNames(List<Reservation> reservations) {
-        if(reservations == null)
-            throw new RuntimeException("List of Reservation is null");
-        return reservations.stream().map(Reservation::getReservationName).distinct().collect(Collectors.toList());
+
+    private static int lastReservationID = -1;
+
+    private static List<Reservation> reservations;
+
+    public static List<Reservation> getReservationsForRoom(int roomID) {
+        return reservations.stream()
+                .filter(res -> res.getRoomID() == roomID).collect(Collectors.toList());
     }
 
-    public static String getReservationDetails(Class<? extends Reservation> reservationClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        return reservationClass.getConstructor().newInstance().getReservationDetails();
+    public static List<Reservation> getOpenReservations() {
+        return reservations.stream().filter(res -> !res.isClosed()).collect(Collectors.toList());
     }
 
-    public static String getReservationDetails(String reservationName, List<Reservation> reservations) {
-        Reservation reservation = reservations.stream().filter(reservation -> reservation.getReservationName().equals(reservationName)).findFirst().orElse(null);
+    public static void init(List<Reservation> inputReservations) {
+        reservations = inputReservations;
+    }
 
-        if(reservation == null)
-            throw new RuntimeException("No reservation names matching the one given");
+    public static int getNextReservationID() {
+        if (lastReservationID < 0) {
+            lastReservationID = reservations.stream().map(Reservation::getReservationID).max(Integer::compareTo).orElse(-1);
+        }
+
+        return ++lastReservationID;
+    }
+
+    public static void addReservation(Reservation newReservation) {
+        if(reservations.contains(newReservation))
+            throw new RuntimeException("Invalid Operation: the reservation is already in the list");
         else
-            return reservation.getReservationDetails();
+            reservations.add(newReservation);
     }
 
-    public static Reservation getReservationByID(int reservationID, List<Reservation> reservations) {
-        Reservation reservation = reservations.stream().filter(reservation -> reservation.getId() == reservationID).findFirst().orElse(null);
+    /**
+     * Get Reservation Details By ID
+     */
+    public static String getReservationDetails(int reservationID) {
+        isRepoInitialized();
+
+        return getReservationByID(reservationID).getReservationDetails();
+    }
+
+    public static Reservation getReservationByID(int reservationID) {
+        isRepoInitialized();
+
+        Reservation reservation = reservations.stream().filter(res -> res.getReservationID() == reservationID).findFirst().orElse(null);
 
         if(reservation == null)
             throw new RuntimeException("No reservation present with give ID");
@@ -32,4 +58,8 @@ public class ReservationRepository {
             return reservation;
     }
 
+    private static void isRepoInitialized() {
+        if(reservations == null || reservations.isEmpty())
+            throw new RuntimeException("Initialize the Repository first");
+    }
 }

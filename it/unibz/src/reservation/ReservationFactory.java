@@ -10,9 +10,9 @@ public class ReservationFactory {
     private Reservation reservation;
 
     private Room room;
-    private List<Customer> customers;
+    private final List<Customer> customers;
 
-    private int reservationID;
+    private final int reservationID;
 
     public ReservationFactory(int reservationID) {
         this.customers = new ArrayList<>();

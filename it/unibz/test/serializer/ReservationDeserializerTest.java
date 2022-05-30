@@ -1,4 +1,4 @@
-package it.unibz.test;
+package it.unibz.test.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unibz.src.customer.Customer;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ReservationDeserializerTest {
-    private static final String singleReservationExample = "{\"roomID\":101,\"customers\":[{\"name\":\"Riccardo\",\"contact\":\"r.r@gmail.com\",\"gender\":\"Male\"}],\"extras\":[{\"code\":1,\"unitaryPrice\":2.0}]}";
+    private static final String singleReservationExample = "{\"reservationID\": 0,\"roomID\":101,\"customers\":[{\"name\":\"Riccardo\",\"contact\":\"r.r@gmail.com\",\"gender\":\"Male\"}],\"extras\":[1,1]}";
     private static final String singleReservationInListExample = String.format("[%s]", singleReservationExample);
     private static final String doubleReservationInListExample = String.format("[%s,%s]", singleReservationExample, singleReservationExample);
 
@@ -25,7 +25,7 @@ public class ReservationDeserializerTest {
     public void deserializeSingleReservationTest() throws IOException {
         Reservation reservation = objectMapper.readValue(singleReservationExample, Reservation.class);
         assertEquals(101, reservation.getRoomID());
-        assertTrue(reservation.getExtras().contains(new Extra(1, 0.0)));
+        assertTrue(reservation.getExtras().contains(1));
         assertTrue(reservation.getCustomers().contains(new Customer("Riccardo", "..", Gender.Male)));
     }
 
@@ -34,7 +34,7 @@ public class ReservationDeserializerTest {
         Reservation reservation = Deserializer.readReservations(ReservationDeserializerTest.singleReservationInListExample).get(0);
 
         assertEquals(101, reservation.getRoomID());
-        assertTrue(reservation.getExtras().contains(new Extra(1, 0.0)));
+        assertTrue(reservation.getExtras().contains(1));
         assertTrue(reservation.getCustomers().contains(new Customer("Riccardo", "..", Gender.Male)));
     }
 
@@ -46,8 +46,8 @@ public class ReservationDeserializerTest {
         Reservation _1 = reservations.get(1);
         assertEquals(101, _0.getRoomID());
         assertEquals(101, _1.getRoomID());
-        assertTrue(_0.getExtras().contains(new Extra(1, 0.0)));
-        assertTrue(_1.getExtras().contains(new Extra(1, 0.0)));
+        assertTrue(_0.getExtras().contains(1));
+        assertTrue(_1.getExtras().contains(1));
         assertTrue(_0.getCustomers().contains(new Customer("Riccardo", "..", Gender.Male)));
         assertTrue(_1.getCustomers().contains(new Customer("Riccardo", "..", Gender.Male)));
     }
