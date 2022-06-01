@@ -40,6 +40,10 @@ public class Reservation {
         return this.extras;
     }
 
+    public boolean isClosed() {
+        return this.closed;
+    }
+
     public void addExtra(int newExtra) {
         if(isClosed())
             throw new RuntimeException("Reservation already closed");
@@ -51,12 +55,11 @@ public class Reservation {
             this.extras.add(newExtra);
     }
 
-    public boolean isClosed() {
-        return this.closed;
-    }
-
     public void close() {
-        this.closed = true;
+        if (this.closed)
+            throw new RuntimeException("Reservation already closed");
+        else
+            this.closed = true;
     }
 
     public String getReservationDetails() {
